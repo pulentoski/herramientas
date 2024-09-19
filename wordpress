@@ -1,0 +1,81 @@
+sintaxis 
+wpscan --url https:/
+
+usuario: --enumerate u
+temas: --enumerate t
+complementos: --enumerate p
+se desactivan comprobaciones de certificados SSL/TLS: --disable-tls-checks
+
+wpscan -e u,ap,at,tt,cb,dbe,m --plugins-detection aggressive  --url http://10.10.221.168/
+wpscan --url http://internal.thm/blog -U admin -P /usr/share/wordlists/rockyou.txt
+
+WPScan Cheat Sheet
+=========================
+
+Escaneo básico:
+-------------------
+1. Escanear un sitio web en busca de vulnerabilidades:
+   wpscan --url <URL>
+
+2. Enumerar plugins instalados:
+   wpscan --url <URL> --enumerate p
+
+3. Enumerar temas instalados:
+   wpscan --url <URL> --enumerate t
+
+4. Enumerar usuarios:
+   wpscan --url <URL> --enumerate u
+
+5. Escanear la base de datos de WordPress:
+   wpscan --url <URL> --enumerate d
+
+6. Realizar un escaneo completo:
+   wpscan --url <URL> --enumerate --all
+
+7. Actualizar la base de datos de vulnerabilidades:
+   wpscan --update
+
+8. Mostrar información detallada sobre una vulnerabilidad específica:
+   wpscan --url <URL> --wp-content-dir <ruta> --enumerate vp --plugins-detection aggressive --vpd <vulnerabilidad>
+
+9. Guardar los resultados del escaneo en un archivo:
+   wpscan --url <URL> --output <nombre_archivo>
+
+10. Ver la ayuda y opciones avanzadas:
+    wpscan --help
+
+Opciones adicionales:
+---------------------
+- Modificar el intervalo de tiempo entre solicitudes:
+  wpscan --url <URL> --request-timeout <segundos>
+
+- Cambiar el número de hilos de escaneo:
+  wpscan --url <URL> --threads <número>
+
+- Autenticarse en WordPress antes de escanear:
+  wpscan --url <URL> --passwords <ruta_archivo> --usernames <ruta_archivo>
+
+- Utilizar un archivo de cookies:
+  wpscan --url <URL> --cookie <ruta_archivo>
+
+- Utilizar un archivo de configuración personalizado:
+  wpscan --config <ruta_archivo>
+
+- Establecer un proxy:
+  wpscan --url <URL> --proxy <proxy>
+
+Información adicional:
+-----------------------
+- WPScan utiliza la base de datos de vulnerabilidades de WPVulnDB para detectar posibles vulnerabilidades en plugins, temas y versiones de WordPress.
+
+- Puedes especificar la ruta de contenido personalizada si WordPress no está instalado en el directorio raíz:
+  --wp-content-dir <ruta>
+
+- Para un escaneo más rápido y agresivo de plugins, utiliza la opción:
+  --plugins-detection aggressive
+
+- Puedes especificar una vulnerabilidad específica utilizando su ID o nombre. Por ejemplo:
+  --vpd <vulnerabilidad>
+
+- WPScan también puede escanear WordPress Multisite utilizando la opción:
+  --multisite-enum
