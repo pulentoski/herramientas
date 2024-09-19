@@ -1,0 +1,4 @@
+whatweb <URL>
+whatweb -i <archivo con muchas páginas>
+modo silencioso: whatweb -q <URL>
+escaneo de subdominios: whatweb --subdomains <URL>
