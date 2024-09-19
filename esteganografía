@@ -1,0 +1,16 @@
+calves fuerza bruta 
+stegcracker file_name password_list
+visualizar  y extraer archivos ocultos dentro de una imagen JPG.
+steghide --extract -sf ejemplo.jpg
+steghide --info cute-alien.jpg
+exiftool:
+exiftool WindowsXP.jpg
+Información de una imagen con archivos adjuntos PNG
+binwalk  --run-as=root -e cutie.png
+binwalk
+texto en binario
+strings Hot_Babe.png
+arreglo de imagen binario
+hexedit "Queen's_Gambit.png"
+información de una imagen:
+exiftool Extinction.jpg
