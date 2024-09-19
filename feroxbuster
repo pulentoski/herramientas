@@ -1,0 +1,1 @@
+feroxbuster -u http://172.17.0.2 -x php,html,txt,pdf,xml,sh -T 2
