@@ -1,0 +1,23 @@
+samba:
+enumerar usuarios: enum4linux -a ip 
+escáner simple: smbmap -H ip
+escanear usuarios: smbclient -L 10.10.13.147word
+conectarse a samba: smbclient //ip/usuario
+smbclient //10.10.55.130/milesdyson -U milesdyson
+
+smbclient -U 'jon' //172.17.0.2/shared:
+
+smbclient: Esta es la herramienta que vamos a utilizar. Es como un programa que entiende el lenguaje de los servidores de archivos.
+-U 'jon': Aquí le estamos diciendo a smbclient que queremos conectarnos como el usuario "jon". Es como decir "mi nombre es jon, por favor déjame entrar".
+//172.17.0.2: Esta es la dirección del servidor al que queremos conectarnos. Es como la dirección de la casa donde está la habitación con los archivos.
+/shared: Este es el nombre de la carpeta compartida a la que queremos acceder. Es como el nombre de la habitación en la casa.
+
+___________________________________
+
+crackmapexec smb 172.17.0.2 -u usuarios.txt -p claves.txt 
+
+crackmapexec: Esta es la herramienta que vamos a usar. Es como una llave maestra que intenta abrir diferentes tipos de cerraduras.
+smb: Le estamos diciendo a la herramienta que se enfoque en un tipo específico de cerradura, en este caso, una que se usa comúnmente en redes de computadoras.
+172.17.0.2: Esta es la dirección de la caja fuerte que queremos abrir. Es como la dirección de esa caja fuerte muy segura.
+-u usuarios.txt: Aquí le damos a la herramienta una lista de nombres posibles para abrir la caja fuerte (usuarios.txt). Es como una lista de nombres que podrías probar para adivinar la contraseña.
+-p claves.txt: Y aquí le damos una lista de posibles contraseñas (claves.txt). Es como una lista de combinaciones que podrías probar para abrir la caja fuer
