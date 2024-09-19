@@ -1,0 +1,29 @@
+nmap:
+-sV versiones
+-sC vulnerabilidades
+-t5 tiempo
+-UDP: nmap -sU -p 
+-TCP: nmap -p 
+-SYN: nmap -sS -p
+-sV
+-sC
+-p : Escaneo de todos los puertos. (65535)
+–open: solo puertos abiertos
+--min-rate 10000
+
+rápido
+-n: No realiza resolución de DNS, evitamos que el escaneo dure más tiempo del necesario.
+–min-rate 5000: Especificamos que el escaneo de puertos no vaya más lento que 5000 paquetes por segundo.
+-sS : Realiza un TCP SYN Scan para escanear de manera rápida qué puertos están abiertos.
+
+silencioso 
+-Pn: Deshabilitamos el descubrimiento de host mediante ping.
+-oG: Este tipo de fichero guarda todo el escaneo en una sola línea haciendo que podamos utilizar comandos como: grep, sed, awk, etc. Este tipo de fichero es muy bueno para la herramienta extractPorts que nos permite copiar directamente los puertos abiertos en la clipboard.
+
+
+La diferencia del escaneo SYN (-sS) con el escaneo TCP (-sT) es que el escaneo SYN no completa el Three Way Handshake, por lo cual interactúa menos con el objetivo, es más rápido y dejamos menos evidencia del escaneo. 
+
+sintaxis:
+nmap -Pn -n -sS -p- -open -sC 10.10.11.130 -vvv
+
+
