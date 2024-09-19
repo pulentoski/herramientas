@@ -1,0 +1,7 @@
+dnsrecon -t brt -d acmeitsupport.thm
+https://crt.sh   https://ui.ctsearch.entrust.com/ui/ctsearchui 
+________________________________oooooo__________________________
+subdominios dns
+dig -x 10.10.10.13 @10.10.10.13
+dig axfr cronos.htb @10.10.10.13
+dig axfr friendzone.red @10.10.10.123
