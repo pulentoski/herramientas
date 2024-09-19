@@ -1,0 +1,62 @@
+gobuster:
+
+dir: enumeración de directorio/archivo
+fuzz: Reemplaza la palabra clave FUZZ en la URL, los encabezados y el cuerpo de la solicitud
+vhost: 
+dns: Utiliza el modo de enumeración de subdominio DNS
+-U url
+-W ruta diccionario
+-T 20
+-x .php, .txt
+--append-domain : para agregar el dominio adelante
+-k: indicador para deshabilitar las comprobaciones de certificados.
+-r 
+--append-domain 
+--no-error
+gobuster vhost -u url -w diccionario -t 180 -r
+gobuster dir -u url -w diccionario -t 180 -r
+gobuster dns -d url -w diccionario -t 180 -r
+gobuster vhost -u url -w diccionario -t 180 -r --append-domain
+gobuster dir -u http://ejemplo.com -w lista_de_directorios.txt --append-domain
+gobuster vhost -u 192.168.1.100 -w lista_de_subdominios.txt --append-domain
+gobuster dns -u ejemplo.com -w lista_de_subdominios.txt --append-domain
+
+
+
+
+
+
+
+
+
+
+sintaxis
+gobuster dir, hvost, dns -w -u 
+
+gobuster dir --wordlist /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt -u http://<ip>/sitemap/ -x php,txt,html
+
+gobuster vhost -t 100 -k -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -u https://nunchucks.htb
+
+gobuster dir -k -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -u http://10.10.170.93/ -t 200 --no-error -x .txt,.php,.http,.xml,.sql
+
+gobuster dir -u http://10.10.10.43 -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -x php -o scans/gobuster-http-root-medium -t 20
+
+gobuster vhost --wordlist /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt -u http://stocker.htb/ -t 200 --append-domain
+
+gobuster fuzz -u fuzz.stocker.htb/login -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 200 --no-error --exclude-length 270
+horizontall.htb
+
+
+gobuster dir -u -w  -t 200
+gobuster dir -u -w  -t 200 --append-domain
+
+
+gobuster vhost -u  -w   -t 200 
+gobuster vhost -u  -w   -t 200 --append-domain
+
+
+gobuster dns -d -w -t 200 
+gobuster dns -d -w -t 200 --append-domain
+
+
+gobuster vhost -u http://shibboleth.htb -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 200 --no-error | grep 'Status: 200'
