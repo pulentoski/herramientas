@@ -1,0 +1,3 @@
+hashcat hash /home/luna/Documentos/herramientas/diccionario/rockyou.txt --show to display them
+muestra el resultado: --show to display them
+
