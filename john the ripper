@@ -1,0 +1,18 @@
+fuerza bruta id_rsa:
+
+./ssh2john.py id_rsa > id_rsa.txt (formato john)
+
+john  --wordlist=/usr/share/wordlsit/rockyou.txt id_rsa.txt
+
+formatos:
+john --format=Raw-SHA256 --wordlist=/usr/share/wordlists/rockyou.txt hash
+
+john --format=NT --wordlist=/usr/share/wordlists/rockyou.txt t.hash   
+
+john --wordlist=/home/luna/Documentos/herramientas/rockyou.txt --format=raw-md5 pass.txt                    
+
+extensiones hash módulos
+zip2john 8702.zip > hash.txt
+
+formato GOST
+john --wordlist=easypeasy.txt --format=gost clave (archivo con la clave gost)
