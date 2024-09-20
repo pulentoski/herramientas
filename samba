@@ -1,9 +1,17 @@
 samba:
-enumerar usuarios: enum4linux -a ip 
-escáner simple: smbmap -H ip
-escanear usuarios: smbclient -L 10.10.13.147word
+enumerar usuarios: 
+- enum4linux -a ip 
+_____________________________________________________
+SMBCLIENT
+
+escáner simple: 
+- smbmap -H ip
+
+escanear usuarios: 
+- smbclient -L 10.10.13.147word
+
 conectarse a samba: smbclient //ip/usuario
-smbclient //10.10.55.130/milesdyson -U milesdyson
+- smbclient //10.10.55.130/milesdyson -U milesdyson
 
 smbclient -U 'jon' //172.17.0.2/shared:
 
@@ -12,8 +20,9 @@ smbclient: Esta es la herramienta que vamos a utilizar. Es como un programa que 
 //172.17.0.2: Esta es la dirección del servidor al que queremos conectarnos. Es como la dirección de la casa donde está la habitación con los archivos.
 /shared: Este es el nombre de la carpeta compartida a la que queremos acceder. Es como el nombre de la habitación en la casa.
 
-___________________________________
+________________________________________________________________________________________________________________________________________________________
 
+Fuerza bruta:
 crackmapexec smb 172.17.0.2 -u usuarios.txt -p claves.txt 
 
 crackmapexec: Esta es la herramienta que vamos a usar. Es como una llave maestra que intenta abrir diferentes tipos de cerraduras.
