@@ -1,0 +1,65 @@
+Filtros de Wireshark Más Utilizados
+Administración de Redes
+Propósito
+
+Filtro Wireshark
+IP Específica
+ip.addr == 192.168.1.1
+
+Protocolo Específico
+tcp
+
+Rango de Puertos
+tcp.port >= 20 && tcp.port <= 25
+
+Dirección MAC
+eth.addr == 00:0a:95:9d:68:16
+
+HTTP GET Requests
+http.request.method == "GET"
+
+DNS Requests
+dns
+
+Tráfico HTTPS
+ssl
+
+ARP Traffic
+arp
+
+Tráfico ICMP
+icmp
+
+_____________________________________________________
+Ciberseguridad
+
+Escaneo de Nmap
+tcp.flags.syn == 1 && tcp.flags.ack == 0
+
+Ataques de Fuerza Bruta
+tcp.flags == 0x02
+
+Tráfico SSH
+tcp.port == 22
+
+Análisis de Telnet
+tcp.port == 23
+
+Tráfico FTP
+ftp
+
+Búsqueda de Credenciales
+http contains "Authorization: Basic"
+
+Tráfico de Correo Electrónico
+smtp
+
+Beaconing de Malware
+ip.src == [IP_of_suspected_malware] && tcp.port == 443
+
+Paquetes Fragmentados
+`ip.flags.mf == 1
+
+Detección de Ataques DDoS
+tcp.flags.syn == 1 && tcp.flags.ack == 0 && frame.time_delta < 0.0001
+
