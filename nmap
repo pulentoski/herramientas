@@ -1,29 +1,62 @@
+El Three-Way Handshake es el proceso utilizado por el protocolo TCP para establecer una conexión entre un cliente y un servidor. 
+
+ 1   SYN:
+        El cliente envía un paquete SYN (synchronize) al servidor para iniciar la conexión.
+
+ 2   SYN-ACK:
+        El servidor responde con un paquete SYN-ACK (synchronize-acknowledge), confirmando que recibió el SYN y está listo para la conexión.
+
+ 3   ACK:
+        El cliente envía un paquete ACK (acknowledge) para confirmar la recepción del SYN-ACK del servidor.
+______________________________________________________________________________________________________________________________________________________
+
 nmap:
 -sV versiones
--sC vulnerabilidades
 -t5 tiempo
 -UDP: nmap -sU -p 
 -TCP: nmap -p 
 -SYN: nmap -sS -p
--sV
--sC
+-sC: lista de vulnerabilidades basicas
 -p : Escaneo de todos los puertos. (65535)
 –open: solo puertos abiertos
---min-rate 10000
-
+-Pn: Deshabilitamos el descubrimiento de host mediante ping.
+--min-rtt-timeout: Tiempo mínimo que nmap espera por respuestas.
+--max-rtt-timeout: Tiempo máximo que nmap espera antes de dar por perdido un paquete.
+--min-rate: Número mínimo de paquetes que nmap enviará por segundo.
+-sn: host activo
+--scan-delay 100ms : nmap esperará 100 milisegundos entre el envío de cada paquete
+-f : fragmenta los paquetes
+-n: No realiza resolución de DNS, evitamos que el escaneo dure más tiempo del necesario.
+-sS :no completa el proceso de conexión TCP
+______________________________________________________________________________________________________________________________________________________
 rápido
 -n: No realiza resolución de DNS, evitamos que el escaneo dure más tiempo del necesario.
-–min-rate 5000: Especificamos que el escaneo de puertos no vaya más lento que 5000 paquetes por segundo.
--sS : Realiza un TCP SYN Scan para escanear de manera rápida qué puertos están abiertos.
 
+–min-rate 5000: Especificamos que el escaneo de puertos no vaya más lento que 5000 paquetes por segundo.
+
+-sS : Realiza un TCP SYN Scan para escanear de manera rápida qué puertos están abiertos.
+______________________________________________________________________________________________________________________________________________________
 silencioso 
 -Pn: Deshabilitamos el descubrimiento de host mediante ping.
--oG: Este tipo de fichero guarda todo el escaneo en una sola línea haciendo que podamos utilizar comandos como: grep, sed, awk, etc. Este tipo de fichero es muy bueno para la herramienta extractPorts que nos permite copiar directamente los puertos abiertos en la clipboard.
+- nmap --min-rtt-timeout 50ms --max-rtt-timeout 300ms -sP 192.168.1.0/24
+- nmap -Pn -n -sS -p- -open -sC 10.10.11.130 -vvv
+-sn:  es útil cuando solo necesitas saber qué dispositivos están activos en la red sin entrar en detalles sobre los puertos y servicios
+--min-rtt-timeout: Tiempo mínimo que nmap espera por respuestas.
+--max-rtt-timeout: Tiempo máximo que nmap espera antes de dar por perdido un paquete.
+--min-rate: Número mínimo de paquetes que nmap enviará por segundo.
+-sn: host activo
+--scan-delay 100ms : nmap esperará 100 milisegundos entre el envío de cada paquete
 
+______________________________________________________________________________________________________________________________________________________
+evasión de Medidas de Seguridad
+para evitar saturar la red o para no activar sistemas de detección de intrusos (IDS) 
+- --scan-delay 100ms
 
-La diferencia del escaneo SYN (-sS) con el escaneo TCP (-sT) es que el escaneo SYN no completa el Three Way Handshake, por lo cual interactúa menos con el objetivo, es más rápido y dejamos menos evidencia del escaneo. 
+La diferencia del escaneo SYN (-sS) con el escaneo TCP (-sT) es que el escaneo SYN no completa el Three Way Handshake, por lo cual interactúa menos con el objetivo, 
+es más rápido y dejamos menos evidencia del escaneo. 
+______________________________________________________________________________________________________________________________________________________
+comandos armados
+nmap -sV -open --scan-delay 100ms -n 
 
-sintaxis:
-nmap -Pn -n -sS -p- -open -sC 10.10.11.130 -vvv
 
 
