@@ -1,3 +1,11 @@
+El Three-Way Handshake es clave para usar Nmap porque permite detectar puertos abiertos y servicios activos. 
+
+Nmap envía un paquete SYN y, si el servidor responde con un SYN-ACK, confirma que el puerto está escuchando. 
+
+En escaneos como el SYN Scan, Nmap interrumpe el handshake antes de completarlo, lo que permite identificar puertos sin establecer una conexión completa, 
+ayudando a evadir detección. Además, el comportamiento del servidor revela si el puerto está cerrado o filtrado por un firewall. 
+Conocer este proceso mejora el análisis de resultados en escaneos TCP.
+
 El Three-Way Handshake es el proceso utilizado por el protocolo TCP para establecer una conexión entre un cliente y un servidor. 
 
  1   SYN:
