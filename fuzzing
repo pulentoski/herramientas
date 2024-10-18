@@ -1,0 +1,28 @@
+Fuzzing de Directorios y Archivos:
+
+wfuzz -w /path/to/wordlist.txt -u "http://example.com/FUZZ" -t 50
+__________________________________________________________________________________________________________________
+Búsqueda de Directorios:
+
+wfuzz -w /usr/share/seclists/Discovery/Web-Content/dirb/common.txt -u "http://example.com/FUZZ/"
+__________________________________________________________________________________________________________________
+Búsqueda de Archivos:
+
+wfuzz -w /usr/share/seclists/Discovery/Web-Content/dirb/common.txt -u "http://example.com/FUZZ.html"
+__________________________________________________________________________________________________________________
+Fuzzing de Subdominios:
+
+wfuzz -w /path/to/subdomains.txt -u "http://example.com" -H "Host: FUZZ.example.com" -t 50
+__________________________________________________________________________________________________________________
+Filtrar Respuestas 200 (OK):
+
+wfuzz -w /usr/share/seclists/Discovery/Web-Content/dirb/common.txt -u "http://example.com/FUZZ" -t 50 -mc 200
+__________________________________________________________________________________________________________________
+Filtrar Respuestas 403 (Forbidden):
+
+wfuzz -w /usr/share/seclists/Discovery/Web-Content/dirb/common.txt -u "http://example.com/FUZZ" -t 50 -mc 403
+__________________________________________________________________________________________________________________
+Fuzzing de Parámetros:
+
+wfuzz -w /path/to/wordlist.txt -u "http://example.com/page.php?id=FUZZ" -t 50
+__________________________________________________________________________________________________________________
