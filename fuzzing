@@ -16,12 +16,9 @@ wfuzz -w /path/to/subdomains.txt -u "http://example.com" -H "Host: FUZZ.example.
 __________________________________________________________________________________________________________________
 Filtrar Respuestas 200 (OK):
 
-wfuzz -w /usr/share/seclists/Discovery/Web-Content/dirb/common.txt -u "http://example.com/FUZZ" -t 50 -mc 200
+wfuzz -w /usr/share/seclists/Discovery/Web-Content/dirb/common.txt -u "http://example.com/FUZZ" -t 50 --sc 200
 __________________________________________________________________________________________________________________
-Filtrar Respuestas 403 (Forbidden):
 
-wfuzz -w /usr/share/seclists/Discovery/Web-Content/dirb/common.txt -u "http://example.com/FUZZ" -t 50 -mc 403
-__________________________________________________________________________________________________________________
 Fuzzing de Parámetros:
 
 wfuzz -w /path/to/wordlist.txt -u "http://example.com/page.php?id=FUZZ" -t 50
