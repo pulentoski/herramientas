@@ -1,0 +1,65 @@
+john --wordlist=/ruta/a/diccionario.txt hash.txt
+
+
+-----------------------------------------------------------------------
+Herramientas para Extraer Hashes
+
+    ZIP
+        Herramienta: zip2john
+        Comando:
+zip2john archivo.zip > hash.txt
+-----------------------------------------------------------------------
+RAR
+
+    Herramienta: rar2john
+    Comando:
+rar2john archivo.rar > hash.txt
+-----------------------------------------------------------------------
+7-Zip (7z)
+
+    Herramienta: 7z2john.pl (script Perl)
+    Comando:
+
+ perl 7z2john.pl archivo.7z > hash.txt
+-----------------------------------------------------------------------
+TAR
+
+    Herramienta: tarsplit (parte de John the Ripper)
+    Comando:
+tar2john archivo.tar > hash.txt
+-----------------------------------------------------------------------
+GZIP
+
+    Herramienta: gzip2john (si está disponible en tu versión de John the Ripper)
+    Comando:
+gzip2john archivo.gz > hash.txt
+-----------------------------------------------------------------------
+BZIP2
+
+    Herramienta: bzip2john (si está disponible en tu versión de John the Ripper)
+    Comando:
+bzip2john archivo.bz2 > hash.txt
+-----------------------------------------------------------------------
+XZ
+
+    Herramienta: xz2john (si está disponible en tu versión de John the Ripper)
+    Comando:
+xz2john archivo.xz > hash.txt
+-----------------------------------------------------------------------
+ARJ
+
+    Herramienta: arj2john
+    Comando:
+arj2john archivo.arj > hash.txt
+-----------------------------------------------------------------------
+LHA
+
+    Herramienta: lha2john
+    Comando:
+lha2john archivo.lha > hash.txt
+-----------------------------------------------------------------------
+CAB
+
+    Herramienta: cab2john
+    Comando:
+cab2john archivo.cab > hash.txt
