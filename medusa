@@ -1,0 +1,56 @@
+Conceptos Básicos y Opciones Comunes
+
+Medusa es una herramienta de fuerza bruta de login que soporta múltiples protocolos y es muy rápida. Aquí están algunas de las opciones principales:
+
+    -h : Dirección IP o nombre de host del objetivo.
+    -u : Nombre de usuario.
+    -U : Archivo de nombres de usuario.
+    -p : Contraseña.
+    -P : Archivo de contraseñas.
+    -M : Módulo o protocolo a utilizar (SSH, FTP, HTTP, etc.).
+    -t : Número de hilos (threads) a usar.
+    -T : Tiempo de espera (timeout) en segundos.
+    -f : Finaliza en el primer usuario exitoso.
+    -e : Prueba contraseñas en blanco (n), igual que el nombre de usuario (u), o ambas (ns).
+
+  ---------------------------------------------------------------------------------------------------------------------------
+
+  Ejemplos de Uso
+a) Fuerza Bruta SSH
+
+Para realizar un ataque de fuerza bruta SSH en un host específico, usa:
+
+medusa -h 192.168.1.10 -u usuario -P /ruta/a/lista_de_contraseñas.txt -M ssh -t 4
+
+Esto intenta iniciar sesión en el servidor SSH en 192.168.1.10 usando el nombre de usuario usuario, una lista de contraseñas y 4 hilos para hacer el proceso más rápido.
+---------------------------------------------------------------------------------------------------------------------------
+b) Fuerza Bruta con FTP
+
+Para FTP, cambia el módulo a ftp:
+
+medusa -h 192.168.1.10 -U /ruta/a/usuarios.txt -P /ruta/a/contraseñas.txt -M ftp -t 4
+
+Aquí se intentarán todas las combinaciones de usuarios y contraseñas del archivo.
+---------------------------------------------------------------------------------------------------------------------------
+c) Fuerza Bruta HTTP (Básica)
+
+Para atacar un servicio HTTP con autenticación básica:
+
+medusa -h 192.168.1.10 -U /ruta/a/usuarios.txt -P /ruta/a/contraseñas.txt -M http -m DIR:/ruta/protegida -t 4
+
+La opción -m especifica la ruta protegida donde la autenticación es requerida.
+---------------------------------------------------------------------------------------------------------------------------
+d) Fuerza Bruta SMB (Samba)
+
+Para SMB, usa:
+
+medusa -h 192.168.1.10 -U /ruta/a/usuarios.txt -P /ruta/a/contraseñas.txt -M smbnt -t 4
+
+Este comando fuerza el acceso SMB en 192.168.1.10 utilizando las listas de usuarios y contraseñas.
+-----------------------------------------------------------------------------------------------------------
+
+Limitar el Rango de IP
+
+Para realizar fuerza bruta en una red o rango de IPs, puedes utilizar la opción -h de la siguiente manera:
+
+medusa -h 192.168.1.1/24 -U /ruta/a/usuarios.txt -P /ruta/a/contraseñas.txt -M ssh
