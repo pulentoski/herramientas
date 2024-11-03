@@ -1,0 +1,11 @@
+Port Knocking: Es una técnica para acceder a puertos que, por defecto, están cerrados en un firewall.
+Mediante una secuencia específica de intentos de conexión a diferentes puertos, se puede configurar el firewall 
+para abrir un puerto determinado solo para el host que intentó esa secuencia. Esto añade una capa de seguridad, 
+pues los puertos no son visibles o accesibles hasta que se realice la secuencia correcta.
+------------------------------------------------------------------------------------------------------
+knock en Kali:
+apt update && sudo apt install -y knockd
+
+knock -v 172.17.0.2 7000 8000 9000
+
+nmap 
