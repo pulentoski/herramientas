@@ -1,0 +1,83 @@
+Paso 1: Instalar Proxychains y Tor-
+
+Actualizar paquetes:
+
+# sudo apt update
+
+Instalar Proxychains:
+
+# sudo apt install proxychains
+
+Instalar Tor:
+
+# sudo apt install tor
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+Paso 2: Configurar Proxychains para usar Tor
+
+Editar el archivo de configuración de Proxychains:
+
+Abre el archivo de configuración:
+
+# sudo nano /etc/proxychains.conf
+
+Configurar dynamic_chain: Descomenta esta línea para usar cualquier proxy disponible de la lista y omitir aquellos que no respondan:
+
+dynamic_chain
+
+Habilitar proxy_dns : Descomenta esta línea para que las solicitudes DNS pasen a través de Tor y no se resuelvan localmente. Esto evita que tu DNS revele información 
+sobre los sitios que visitas:
+
+proxy_dns
+
+Configurar el proxy SOCKS5 de Tor: Añade la configuración de Tor como un proxy SOCKS5 al final del archivo. Tor, por defecto, escucha en 127.0.0.1 en el puerto 9050, 
+así que agrega esta línea al final de la configuración:
+
+socks5 127.0.0.1 9050
+
+Guardar y cerrar el archivo (Ctrl + X, luego Y y presiona Enter).
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+Paso 3: Iniciar el servicio de Tor
+
+Asegúrate de que Tor esté en funcionamiento para que proxychains pueda usarlo:
+
+# sudo service tor start
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+Paso 4: Usar Proxychains con Tor
+
+Ahora que todo está configurado, puedes usar proxychains para ejecutar aplicaciones y redirigir su tráfico a través de Tor. Aquí tienes algunos ejemplos:
+
+Para navegar por la web con Firefox:
+
+# proxychains firefox
+
+Para hacer una solicitud con curl:
+
+# proxychains curl http://example.com
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+Paso 5: Cambiar la Dirección MAC con macchanger
+
+Cambiar la dirección MAC ayuda a mejorar tu anonimato, especialmente en redes públicas. macchanger permite cambiar la dirección MAC de tu tarjeta de red.
+
+Instalar macchanger:
+
+# sudo apt install macchanger
+
+Usar macchanger para cambiar la dirección MAC: Primero, apaga la interfaz de red (en este ejemplo, wlan0). Puedes verificar el nombre de tu interfaz con ifconfig o ip a.
+
+# sudo ifconfig wlan0 down
+
+Cambiar la dirección MAC a una aleatoria:
+
+# sudo macchanger -r wlan0
+
+O, para cambiarla a una específica, usa:
+
+# sudo macchanger --mac=XX:XX:XX:XX:XX:XX wlan0
+
+Volver a activar la interfaz de red:
+
+# sudo ifconfig wlan0 up
