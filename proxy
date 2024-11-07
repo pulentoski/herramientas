@@ -35,6 +35,15 @@ así que agrega esta línea al final de la configuración:
 
 socks5 127.0.0.1 9050
 
+Cambio de ubicación o país:
+
+Si deseas cambiar la ubicación de tu proxy para simular que estás en otro país, puedes agregar proxies de diferentes ubicaciones (como de diferentes países) en Proxychains antes o después de Tor. Esto te permite controlar y alterar tu IP visible.
+
+Ejemplo:
+
+socks5 127.0.0.1 9050  # Tor (US)
+socks5 123.45.67.89 1080  # Proxy (UK)
+
 Guardar y cerrar el archivo (Ctrl + X, luego Y y presiona Enter).
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
