@@ -1,0 +1,129 @@
+Guía Profesional para Unir Debian 12 a un Dominio de Active Directory
+Objetivo
+Integrar Debian 12 en un dominio de Active Directory para permitir que los usuarios del dominio puedan autenticarse en el servidor Debian y gestionar permisos y recursos de forma centralizada.
+
+Prerrequisitos
+Un servidor Debian 12 con acceso a Internet y permisos de administrador (root o sudo).
+Un dominio de Active Directory funcionando (por ejemplo, miempresa.local).
+Credenciales de administrador de Active Directory.
+Configuración de red que permita que Debian se comunique con el controlador de dominio.
+Pasos de Configuración
+1. Instalar los Paquetes Necesarios
+Para unir Debian a un dominio de Active Directory, debes instalar paquetes que soporten la integración y autenticación con AD: realmd, sssd, samba-common-bin, krb5-user, adcli, y policykit-1.
+
+Ejecuta el siguiente comando:
+
+bash
+Copiar código
+sudo apt update
+sudo apt install realmd sssd samba-common-bin krb5-user adcli policykit-1
+2. Configurar Kerberos
+Kerberos es esencial para la autenticación en AD. Configura el archivo /etc/krb5.conf para apuntar a tu dominio.
+
+Edita el archivo con el siguiente contenido:
+
+ini
+Copiar código
+[libdefaults]
+    default_realm = MIEMPRESA.LOCAL
+    dns_lookup_realm = false
+    dns_lookup_kdc = true
+
+[realms]
+    MIEMPRESA.LOCAL = {
+        kdc = servidor_ad.miempresa.local
+        admin_server = servidor_ad.miempresa.local
+    }
+
+[domain_realm]
+    .miempresa.local = MIEMPRESA.LOCAL
+    miempresa.local = MIEMPRESA.LOCAL
+Guarda y cierra el archivo.
+
+3. Probar la Conexión con el Controlador de Dominio
+Para verificar que Kerberos puede comunicarse correctamente con el controlador de dominio, utiliza el siguiente comando:
+
+bash
+Copiar código
+kinit administrador@MIEMPRESA.LOCAL
+Se te pedirá la contraseña del administrador. Si el comando es exitoso, no devolverá ningún error. Puedes verificar el ticket Kerberos con:
+
+bash
+Copiar código
+klist
+4. Unir el Servidor Debian al Dominio de Active Directory
+Con los paquetes y Kerberos configurados, utiliza realmd para unir el servidor al dominio de AD:
+
+bash
+Copiar código
+sudo realm join --user=administrador miempresa.local
+Este comando te pedirá la contraseña del usuario de AD especificado (en este caso, administrador). Si el proceso es exitoso, el servidor Debian estará unido al dominio.
+
+5. Verificar la Unión al Dominio
+Para confirmar que el servidor está correctamente unido al dominio, ejecuta:
+
+bash
+Copiar código
+realm list
+Este comando debería mostrar detalles del dominio y el estado de la unión.
+
+6. Configurar SSSD para la Autenticación de Usuarios del Dominio
+sssd maneja la autenticación de usuarios del dominio. Normalmente, realmd configura automáticamente /etc/sssd/sssd.conf. Verifica que el archivo tenga las siguientes configuraciones:
+
+ini
+Copiar código
+[sssd]
+services = nss, pam
+config_file_version = 2
+domains = miempresa.local
+
+[domain/miempresa.local]
+id_provider = ad
+access_provider = ad
+fallback_homedir = /home/%u@%d
+default_shell = /bin/bash
+ad_domain = miempresa.local
+ldap_id_mapping = true
+Asegúrate de que este archivo tenga permisos correctos para proteger la configuración:
+
+bash
+Copiar código
+sudo chmod 600 /etc/sssd/sssd.conf
+Reinicia el servicio sssd para aplicar los cambios:
+
+bash
+Copiar código
+sudo systemctl restart sssd
+7. Configurar PAM para la Creación Automática de Directorios de Inicio
+Para que los usuarios de AD tengan un directorio de inicio cuando inicien sesión en Debian, habilita el servicio oddjobd y configura PAM.
+
+Instala y habilita oddjob:
+
+bash
+Copiar código
+sudo apt install oddjob oddjob-mkhomedir
+sudo systemctl enable oddjobd --now
+8. Probar la Autenticación de Usuarios del Dominio
+Para asegurarte de que Debian puede autenticar usuarios de AD, intenta obtener la información de un usuario de dominio:
+
+bash
+Copiar código
+id usuario@miempresa.local
+Si el usuario es reconocido, Debian está correctamente unido y puede autenticar usuarios de Active Directory.
+
+9. Configurar Firewalld (Opcional)
+Si el servidor Debian tiene firewalld activado, asegúrate de que permite el tráfico necesario para Kerberos y LDAP:
+
+bash
+Copiar código
+sudo firewall-cmd --permanent --add-service=kerberos
+sudo firewall-cmd --permanent --add-service=ldap
+sudo firewall-cmd --reload
+Verificación Final
+Inicio de Sesión de Usuarios: Intenta iniciar sesión con un usuario del dominio para verificar que el sistema permite la autenticación.
+Directorio de Inicio: Al iniciar sesión, confirma que se crea el directorio de inicio del usuario en /home/usuario@miempresa.local.
+Administración de Usuarios de AD: Ahora puedes gestionar el acceso de usuarios en AD y permitir que los usuarios accedan a Debian según las políticas de AD.
+Solución de Problemas Comunes
+Error de Kerberos: Si no puedes autenticarte con Kerberos, revisa la configuración en /etc/krb5.conf y asegúrate de que el servidor de AD es accesible.
+Problemas de sssd: Si sssd no arranca o no permite la autenticación, revisa /etc/sssd/sssd.conf y los registros en /var/log/sssd/.
+Directorio de Inicio No Creado: Asegúrate de que oddjobd está habilitado y funcionando.
