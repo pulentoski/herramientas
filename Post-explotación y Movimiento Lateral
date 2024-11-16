@@ -251,4 +251,68 @@ Comando para crear un usuario oculto en Linux:
 
 sudo useradd -m -r -s /bin/bash backdoor_user
 
-Explicación: Este comando crea un usuario oculto con acceso de root que no será visible en las listas de usuarios comunes.
+Explicación: Este comando crea un usuario oculto con acceso de root que no será visible en las listas de usuarios comunes.-----
+------------------------------------
+---------------------------------
+---------------------
+
+Crear un Usuario y Configurar SSH para Persistencia en un CTF
+
+Este tutorial cubre los pasos necesarios para crear un usuario en Linux y configurarlo para que se conecte a través de SSH, lo cual es útil en la fase de persistencia durante un CTF (Capture The Flag).
+1. Crear el Usuario
+
+    Crea un nuevo usuario con el comando useradd y asigna un directorio home.
+
+    sudo useradd -m tii
+
+2. Asignar una Contraseña al Usuario
+
+    Asigna una contraseña para el nuevo usuario. Esto es necesario para la autenticación por contraseña.
+
+    sudo passwd tii
+
+    Se te pedirá que ingreses y confirmes la contraseña.
+
+3. Configurar SSH para Aceptar Conexiones por Contraseña
+
+    Abre el archivo de configuración del servidor SSH (sshd_config).
+
+sudo nano /etc/ssh/sshd_config
+
+Asegúrate de que las siguientes líneas estén configuradas correctamente:
+
+    Permitir autenticación por contraseña:
+
+PasswordAuthentication yes
+
+Permitir conexiones desde cualquier IP:
+
+ListenAddress 0.0.0.0
+
+Si no lo has hecho, también desactiva la autenticación de clave pública si no la necesitas:
+
+        PubkeyAuthentication no
+
+4. Reiniciar el Servicio SSH
+
+    Guarda y cierra el archivo de configuración. Luego reinicia el servicio SSH para aplicar los cambios:
+
+    sudo systemctl restart sshd
+
+5. Verificar que SSH Está Funcionando
+
+    Asegúrate de que el servicio SSH está corriendo y escuchando en el puerto configurado:
+
+sudo systemctl status sshd
+
+Deberías ver algo similar a:
+
+    Active: active (running)
+
+6. Conectarse al Servidor SSH
+
+    Ahora, puedes conectarte al servidor usando el siguiente comando desde una máquina remota (reemplaza <IP_del_servidor> con la IP real del servidor):
+
+ssh -p 2243 tii@<IP_del_servidor>
+
+Ingresa la contraseña que asignaste al usuario tii cuando se te solicite.
