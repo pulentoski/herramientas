@@ -1,0 +1,55 @@
+Resumen técnico de datos sensibles tras acceso root
+
+    Información del sistema
+        Hostname: hostname.
+        Red: IPs, interfaces y tabla de rutas (ip a, route -n).
+        SO: Versión del sistema (cat /etc/os-release, uname -a).
+        Usuarios y grupos: cat /etc/passwd, cat /etc/group.
+        Puertos abiertos y servicios: netstat -tulnp, ss -tuln.
+_____________________________________________________________________________________________________
+    Credenciales
+        Archivos sensibles:
+            /etc/shadow (hashes).
+            Historiales (.bash_history, .zsh_history).
+            Configs (.env, config.php).
+        Claves SSH:
+            ~/.ssh/id_rsa, ~/.ssh/authorized_keys.
+        Tokens/API keys: Buscar en .aws/credentials, .docker/config.json, scripts.
+_____________________________________________________________________________________________________
+    Archivos y directorios sensibles
+        Directorios clave: /var/www/html/, /etc/, /home/*.
+        Permisos inadecuados: find / -perm 777 2>/dev/null.
+_____________________________________________________________________________________________________
+    Bases de datos
+        Credenciales: Configs relacionadas con bases de datos.
+        Servicios activos: MySQL, PostgreSQL (ps aux | grep mysql).
+        Dumps o accesos: mysqldump, pg_dump.
+_____________________________________________________________________________________________________
+    Logs y monitoreo
+        Sistema: /var/log/auth.log, /var/log/secure, /var/log/syslog.
+        Aplicaciones: /var/www/logs.
+_____________________________________________________________________________________________________
+    Usuarios activos
+        Sesiones: who, w, last.
+        Procesos: ps aux | grep <usuario>.
+_____________________________________________________________________________________________________
+    Kernel y módulos
+        Versión y módulos: uname -r, lsmod.
+        Config del kernel: sysctl -a.
+_____________________________________________________________________________________________________
+    Red y conexiones
+        Conexiones activas: netstat -an, ss -an.
+        DNS y proxies: cat /etc/resolv.conf, env | grep -i proxy.
+_____________________________________________________________________________________________________
+    Persistencia
+        Tareas programadas: crontab -l, cat /etc/crontab.
+        Servicios personalizados: systemctl list-units.
+_____________________________________________________________________________________________________
+    Vulnerabilidades adicionales
+        Binarios SUID: find / -perm -4000 2>/dev/null.
+        Scripts globalmente ejecutables: find / -perm -111 2>/dev/null.
+        Contraseñas en texto plano: Revisar archivos comunes.
+_____________________________________________________________________________________________________
+    Entorno sensible
+        Variables activas: env.
+        Configuraciones en contenedores/VM: Verificar Docker, VirtualBox, etc.
