@@ -1,0 +1,76 @@
+ss
+Uso básico Mostrar conexiones activas (TCP):
+ss
+-----------------------------------------------------------------------------
+Mostrar todas las conexiones (TCP, UDP, UNIX):
+ss -a
+-----------------------------------------------------------------------------
+Filtrar por protocolo:
+
+TCP: ss -t
+UDP: ss -u
+UNIX: ss -x
+-----------------------------------------------------------------------------
+Opciones comunes
+
+Puertos abiertos y servicios activos:
+
+ss -tuln
+-t: TCP.
+-u: UDP.
+-l: Escuchando (listening).
+-n: Sin resolución de nombres (más rápido).
+-----------------------------------------------------------------------------
+Conexiones activas con procesos: Muestra los procesos asociados a las conexiones.
+ss -p
+-----------------------------------------------------------------------------
+Filtrar por estado:
+
+ss -t state ESTABLISHED
+
+    Estados comunes:
+        ESTABLISHED: Conexiones activas.
+        LISTEN: Puertos escuchando.
+        CLOSE-WAIT: Esperando cierre.
+-----------------------------------------------------------------------------
+Mostrar estadísticas de red detalladas:
+ss -s
+-----------------------------------------------------------------------------
+Filtros avanzados Filtrar por IP o puerto:
+Por dirección IP:
+ss dst 192.168.1.1
+
+Por puerto:
+ss dport = 22
+-----------------------------------------------------------------------------
+Conexiones locales o remotas:
+
+    Locales:
+
+ss -tlo
+
+Remotas:
+
+        ss -tr
+-----------------------------------------------------------------------------
+Ejemplos útiles
+
+    Conexiones SSH activas:
+
+ss -t state ESTABLISHED '( dport = :22 )'
+-----------------------------------------------------------------------------
+Mostrar puertos abiertos en la máquina:
+
+ss -lntu
+-----------------------------------------------------------------------------
+Ver conexiones con mayor detalle:
+
+    ss -tnp
+-----------------------------------------------------------------------------
+Consejos:
+
+    Usa siempre -n para evitar la resolución de nombres, especialmente en redes grandes.
+    Combina filtros con opciones para obtener resultados más precisos.
+    ss es ideal para auditar conexiones y solucionar problemas de red en tiempo real.
+_______________________________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________________________
